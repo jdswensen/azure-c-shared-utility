@@ -221,6 +221,16 @@ ${THREAD_C_FILE}
 ${UNIQUEID_C_FILE}
 )
 
+if(MSVC)
+    set(source_h_files ${source_h_files}
+        ./pal/windows/refcount_os.h
+    )
+else()
+    set(source_h_files ${source_h_files}
+        ./pal/linux/refcount_os.h
+    )
+endif()
+
 if(UNIX) #LINUX OR APPLE
     set(source_c_files ${source_c_files}
         ./adapters/linux_time.c
