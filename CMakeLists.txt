@@ -11,6 +11,9 @@ project(azure_c_shared_utility)
 
 set(C_SHARED_VERSION 1.0.48)
 
+set(GENERIC_LIB_VERSION ${C_SHARED_VERSION})
+string(SUBSTRING ${C_SHARED_VERSION} 0 1 GENERIC_LIB_SOVERSION)
+
 # Include the common build rules for the C SDK
 include(configs/azure_iot_build_rules.cmake)
 
@@ -462,6 +465,13 @@ endif()
 target_link_libraries(aziotsharedutil ${aziotsharedutil_target_libs})
 if(${build_as_dynamic})
     target_link_libraries(aziotsharedutil_dll ${aziotsharedutil_target_libs})
+    if (NOT WIN32)
+        set_target_properties(aziotsharedutil_dll
+            PROPERTIES
+            VERSION ${GENERIC_LIB_VERSION}
+            SOVERSION ${GENERIC_LIB_SOVERSION}
+        )
+    endif()
 endif()
 
 if (${run_unittests} OR ${run_e2e_tests})
